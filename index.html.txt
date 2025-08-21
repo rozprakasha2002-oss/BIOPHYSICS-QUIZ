@@ -1,0 +1,194 @@
+<BIOPHYSICS-QUIZ.html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>biophysics Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #c9ffbf, #ffafbd);
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    .question {
+      background: #fff;
+      padding: 20px;
+      margin: 15px 0;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .options button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #f0f0f0;
+      transition: 0.3s;
+    }
+    .options button:hover {
+      background: #dcdcdc;
+    }
+    .correct { background: #a8e6cf !important; }
+    .wrong { background: #ff8b94 !important; }
+    .explanation {
+      margin-top: 10px;
+      font-style: italic;
+      color: #333;
+    }
+    #score-container {
+      display: none;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+    button.restart {
+      margin-top: 20px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #6a82fb;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>biophysics Quiz</h1>
+    <div id="quiz-container"></div>
+    <div id="score-container">
+      <h2>Your Score: <span id="score"></span>/50</h2>
+      <button class="restart" onclick="restartQuiz()">Restart Quiz</button>
+    </div>
+  </div>
+  <script>
+    const questions = [
+      {q: "First law of thermodynamics states:", options:["Energy can be created","Energy is destroyed","Energy is conserved","Heat converts fully into work"], answer:2, explanation:"Energy can neither be created nor destroyed, only transformed."},
+      {q: "Which variable is kept constant in isothermal process?", options:["Temperature","Pressure","Volume","Entropy"], answer:0, explanation:"Isothermal means constant temperature."},
+      {q: "Gibbs free energy (G) is defined as:", options:["H – TS","U + PV","H + TS","PV – TS"], answer:0, explanation:"G = H – TS where H=enthalpy, T=temp, S=entropy."},
+      {q: "Bond energy refers to:", options:["Energy released in bond formation","Energy required to break one mole of bonds","Kinetic energy of bonds","Free energy change"], answer:1, explanation:"Bond energy is the energy required to break one mole of bonds in gaseous molecules."},
+      {q: "Polymerization of amino acids yields:", options:["Nucleic acids","Proteins","Lipids","Polysaccharides"], answer:1, explanation:"Amino acids polymerize to form proteins."},
+      {q: "DNA is an example of:", options:["Protein","Polysaccharide","Nucleic acid","Lipid"], answer:2, explanation:"DNA is a nucleic acid biopolymer."},
+      {q: "Biomembrane structure follows which model?", options:["Double helix","Fluid mosaic","Triple layer","Rigid barrier"], answer:1, explanation:"The Singer-Nicolson fluid mosaic model explains biomembranes."},
+      {q: "Which are membrane transport proteins?", options:["Pores","Pumps","Channels","All of the above"], answer:3, explanation:"Biomembranes contain pores, pumps and ion channels."},
+      {q: "Rod cells in eye are responsible for:", options:["Color vision","Dim light vision","Sharp vision","Daylight vision"], answer:1, explanation:"Rods work in dim light, cones in bright color vision."},
+      {q: "ECG is used to measure:", options:["Brain waves","Heart electrical activity","Lung volume","Blood glucose"], answer:1, explanation:"Electrocardiogram records electrical activity of the heart."},
+      {q: "EEG records:", options:["Muscle activity","Brain electrical activity","Kidney function","Liver enzymes"], answer:1, explanation:"Electroencephalogram records brain waves."},
+      {q: "MRI stands for:", options:["Magnetic Resonance Imaging","Molecular Radio Imaging","Micro Radiation Imaging","Magnet Radiant Imaging"], answer:0, explanation:"MRI = Magnetic Resonance Imaging."},
+      {q: "Ultrasound uses:", options:["X-rays","Sound waves >20kHz","Infrared light","Magnetic fields"], answer:1, explanation:"Ultrasound uses high frequency sound waves."},
+      {q: "Centrifuge works on:", options:["Diffusion","Centripetal force","Centrifugal force","Magnetic pull"], answer:2, explanation:"Centrifuge separates by centrifugal force."},
+      {q: "Colorimeter is used for:", options:["Measuring pH","Measuring absorbance of light","Counting cells","Measuring pressure"], answer:1, explanation:"Colorimeter measures light absorbance to determine concentration."},
+      {q: "Second law of thermodynamics states:", options:["Entropy always increases","Energy is constant","Work is 100% efficient","Heat flows cold to hot"], answer:0, explanation:"In spontaneous processes, entropy tends to increase."},
+      {q: "Which energy drives active transport across membranes?", options:["Entropy","Heat","ATP hydrolysis","Bond energy"], answer:2, explanation:"Active transport uses ATP hydrolysis energy."},
+      {q: "Which structure controls selective permeability of cells?", options:["Cell wall","Nucleus","Plasma membrane","Ribosome"], answer:2, explanation:"Plasma membrane controls selective transport."},
+      {q: "Light enters eye through:", options:["Lens","Retina","Pupil","Cornea"], answer:3, explanation:"Cornea is the transparent entry layer."},
+      {q: "EEG electrodes are placed on:", options:["Chest","Scalp","Abdomen","Legs"], answer:1, explanation:"EEG electrodes are attached to scalp."},
+      {q: "ECG P wave corresponds to:", options:["Atrial depolarization","Ventricular depolarization","Atrial repolarization","Ventricular repolarization"], answer:0, explanation:"P wave indicates atrial depolarization."},
+      {q: "Which imaging is safest for pregnant women?", options:["X-ray","CT scan","MRI","Ultrasound"], answer:3, explanation:"Ultrasound is safe as it uses sound waves."},
+      {q: "Proteins are polymers of:", options:["Glucose","Amino acids","Nucleotides","Fatty acids"], answer:1, explanation:"Proteins are chains of amino acids."},
+      {q: "Polysaccharides are polymers of:", options:["Sugars","Proteins","Lipids","Nucleotides"], answer:0, explanation:"Polysaccharides are long chains of monosaccharides."},
+      {q: "ATP is primarily produced in:", options:["Nucleus","Cytoplasm","Mitochondria","Golgi"], answer:2, explanation:"ATP synthesis occurs mainly in mitochondria."},
+      {q: "Bond order indicates:", options:["Bond strength","Bond length","Bond energy","All of these"], answer:3, explanation:"Bond order relates to bond strength, energy, and length."},
+      {q: "Ion channels allow:", options:["Passive diffusion","Active transport","Endocytosis","Exocytosis"], answer:0, explanation:"Ion channels permit passive ion diffusion."},
+      {q: "Which part of eye focuses light?", options:["Lens","Retina","Pupil","Iris"], answer:0, explanation:"Lens focuses light on retina."},
+      {q: "Color vision is mediated by:", options:["Rods","Cones","Cornea","Iris"], answer:1, explanation:"Cones detect color vision."},
+      {q: "Which test detects hemoglobin concentration?", options:["Colorimeter","ECG","EEG","MRI"], answer:0, explanation:"Colorimeter measures absorbance to detect hemoglobin levels."},
+      {q: "Gibbs free energy negative indicates:", options:["Non-spontaneous","Spontaneous","Equilibrium","Impossible"], answer:1, explanation:"ΔG < 0 means spontaneous reaction."},
+      {q: "Enthalpy change at constant pressure is:", options:["Work done","Heat absorbed/released","Entropy","Free energy"], answer:1, explanation:"ΔH = heat at constant pressure."},
+      {q: "Main lipid in biomembranes:", options:["Phospholipid","Cholesterol","Triglyceride","Steroid"], answer:0, explanation:"Phospholipids are major membrane lipids."},
+      {q: "Which device separates blood components?", options:["ECG","Centrifuge","MRI","EEG"], answer:1, explanation:"Centrifuge separates based on density."},
+      {q: "Which medical imaging uses X-rays?", options:["MRI","CT scan","Ultrasound","EEG"], answer:1, explanation:"CT scan uses X-rays."},
+      {q: "Entropy is a measure of:", options:["Order","Disorder","Energy","Work"], answer:1, explanation:"Entropy measures disorder or randomness."},
+      {q: "Which polymer stores genetic info?", options:["Protein","RNA/DNA","Polysaccharide","Lipid"], answer:1, explanation:"DNA/RNA are information-carrying polymers."},
+      {q: "Which ion is vital for muscle contraction?", options:["Na+","K+","Ca2+","Cl-"], answer:2, explanation:"Ca2+ is essential for muscle contraction."},
+      {q: "Biological pumps maintain:", options:["Ion gradients","Pressure","Temperature","DNA"], answer:0, explanation:"Membrane pumps maintain ion gradients."},
+      {q: "Which part of retina has highest cone density?", options:["Macula","Fovea centralis","Optic disc","Periphery"], answer:1, explanation:"Fovea centralis has high cone density for sharp vision."},
+      {q: "Ultrasound frequency range:", options:["20–20k Hz",">20 kHz","<20 Hz",">1 GHz"], answer:1, explanation:"Ultrasound uses >20 kHz sound waves."},
+      {q: "ECG QRS complex represents:", options:["Atrial depolarization","Ventricular depolarization","Atrial repolarization","SA node"], answer:1, explanation:"QRS complex = ventricular depolarization."},
+      {q: "Which energy drives diffusion?", options:["Chemical potential","ATP","Bond energy","Heat only"], answer:0, explanation:"Diffusion driven by chemical potential gradient."},
+      {q: "Which equipment uses magnets and radio waves?", options:["CT","MRI","Ultrasound","ECG"], answer:1, explanation:"MRI uses strong magnets and radio waves."},
+      {q: "Internal energy (U) consists of:", options:["Kinetic + Potential energy of molecules","Only kinetic","Only potential","Work"], answer:0, explanation:"U = total kinetic + potential microscopic energy."},
+      {q: "Which method separates proteins by size?", options:["Centrifugation","Gel electrophoresis","Colorimetry","MRI"], answer:1, explanation:"Gel electrophoresis separates proteins by size."},
+      {q: "Biomembrane fluidity is increased by:", options:["Saturated fats","Unsaturated fats","Cholesterol only","Proteins"], answer:1, explanation:"Unsaturated fatty acids increase fluidity."},
+      {q: "Which law relates entropy change to heat?", options:["Zeroth law","First law","Second law","Third law"], answer:2, explanation:"Second law: ΔS ≥ q/T."},
+      {q: "Which pigment is light sensitive in vision?", options:["Rhodopsin","Chlorophyll","Hemoglobin","Melanin"], answer:0, explanation:"Rhodopsin in rods detects light."},
+      {q: "Which device spins samples at high speed?", options:["Spectrometer","Centrifuge","ECG","EEG"], answer:1, explanation:"Centrifuge spins samples for separation."},
+      {q: "Third law of thermodynamics states:", options:["Entropy of perfect crystal at 0K is zero","Entropy always increases","Energy conserved","Work=heat"], answer:0, explanation:"At absolute zero, entropy approaches zero."}
+    ];
+
+    let currentIndex = 0;
+    let score = 0;
+    let shuffled = [];
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function startQuiz() {
+      shuffled = shuffle([...questions]);
+      currentIndex = 0;
+      score = 0;
+      document.getElementById("score-container").style.display = "none";
+      showQuestion();
+    }
+
+    function showQuestion() {
+      if (currentIndex >= 50) {
+        document.getElementById("quiz-container").innerHTML = "";
+        document.getElementById("score").innerText = score;
+        document.getElementById("score-container").style.display = "block";
+        return;
+      }
+      const q = shuffled[currentIndex];
+      const quizDiv = document.getElementById("quiz-container");
+      quizDiv.innerHTML = `<div class='question'><h3>Q${currentIndex+1}. ${q.q}</h3><div class='options'></div><div class='explanation'></div></div>`;
+      const optionsDiv = quizDiv.querySelector(".options");
+      q.options.forEach((opt,i)=>{
+        const btn = document.createElement("button");
+        btn.innerText = opt;
+        btn.onclick = ()=>checkAnswer(btn,i,q);
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(button,index,q){
+      const options = button.parentElement.querySelectorAll("button");
+      options.forEach(b=>b.disabled=true);
+      if(index===q.answer){
+        button.classList.add("correct");
+        score++;
+      } else {
+        button.classList.add("wrong");
+        options[q.answer].classList.add("correct");
+      }
+      button.parentElement.nextElementSibling.innerHTML = "Explanation: "+q.explanation;
+      setTimeout(()=>{currentIndex++;showQuestion();},1500);
+    }
+
+    function restartQuiz(){
+      startQuiz();
+    }
+
+    startQuiz();
+  </script>
+</body>
+</html>
